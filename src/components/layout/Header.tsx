@@ -1,5 +1,6 @@
 import { Bell, Search, User, Command } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -24,7 +25,7 @@ export function Header({ title, subtitle }: HeaderProps) {
         )}
       </div>
 
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2">
         {/* Search */}
         <button className="hidden md:flex items-center gap-2 px-3 py-2 rounded-xl bg-muted/50 border border-border/40 text-muted-foreground hover:bg-muted hover:text-foreground transition-all w-64">
           <Search className="w-4 h-4" />
@@ -33,6 +34,9 @@ export function Header({ title, subtitle }: HeaderProps) {
             <Command className="w-3 h-3" />K
           </kbd>
         </button>
+
+        {/* Theme Toggle */}
+        <ThemeToggle />
 
         {/* Notifications */}
         <Button variant="ghost" size="icon" className="relative rounded-xl hover:bg-muted/50">
