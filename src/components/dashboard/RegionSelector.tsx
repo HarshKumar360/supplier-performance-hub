@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import { getRegionData } from "@/data/mockData";
-import { Globe, MapPin } from "lucide-react";
+import { Globe, MapPin, Building2, Users } from "lucide-react";
 
 interface RegionSelectorProps {
   selectedRegion: string | null;
@@ -8,6 +8,15 @@ interface RegionSelectorProps {
 }
 
 const regionColors: Record<string, string> = {
+  UK: "from-chart-1/20 to-chart-1/5",
+  Germany: "from-chart-2/20 to-chart-2/5",
+  Netherlands: "from-chart-3/20 to-chart-3/5",
+  US: "from-chart-4/20 to-chart-4/5",
+  ANZ: "from-chart-5/20 to-chart-5/5",
+  "South Africa": "from-primary/20 to-primary/5",
+};
+
+const dotColors: Record<string, string> = {
   UK: "bg-chart-1",
   Germany: "bg-chart-2",
   Netherlands: "bg-chart-3",
@@ -20,56 +29,68 @@ export function RegionSelector({ selectedRegion, onSelectRegion }: RegionSelecto
   const regions = getRegionData();
 
   return (
-    <div className="bg-card rounded-xl border border-border/50 p-5">
-      <div className="flex items-center justify-between mb-4">
-        <h3 className="font-semibold text-foreground">Regions</h3>
-        <button
-          onClick={() => onSelectRegion(null)}
-          className={cn(
-            "flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm transition-colors",
-            !selectedRegion
-              ? "bg-primary text-primary-foreground"
-              : "bg-muted text-muted-foreground hover:bg-muted/80"
-          )}
-        >
-          <Globe className="w-4 h-4" />
-          Global
-        </button>
-      </div>
+    <div className="space-y-3">
+      {/* Global Toggle */}
+      <button
+        onClick={() => onSelectRegion(null)}
+        className={cn(
+          "w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200",
+          !selectedRegion
+            ? "bg-primary text-primary-foreground shadow-md"
+            : "bg-card border border-border/40 text-muted-foreground hover:text-foreground hover:border-border/60"
+        )}
+      >
+        <Globe className="w-4 h-4" />
+        All Regions
+      </button>
 
-      <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
+      {/* Region Grid */}
+      <div className="grid grid-cols-2 lg:grid-cols-3 gap-2">
         {regions.map((region) => (
           <button
             key={region.region}
             onClick={() => onSelectRegion(region.region)}
             className={cn(
-              "p-4 rounded-lg border text-left transition-all hover:shadow-md",
+              "relative overflow-hidden p-4 rounded-xl text-left transition-all duration-200 group",
               selectedRegion === region.region
-                ? "border-primary bg-primary/5 ring-1 ring-primary"
-                : "border-border/50 bg-background hover:border-border"
+                ? "bg-card border-2 border-primary shadow-md"
+                : "bg-card border border-border/40 hover:border-border/60 hover:shadow-sm"
             )}
           >
-            <div className="flex items-center gap-2 mb-2">
-              <div className={cn("w-2 h-2 rounded-full", regionColors[region.region])} />
-              <span className="font-medium text-sm">{region.region}</span>
-            </div>
-            <div className="grid grid-cols-2 gap-2 text-xs text-muted-foreground">
-              <div>
-                <span className="block font-semibold text-foreground text-lg">
-                  {region.siteCount}
-                </span>
-                Sites
+            {/* Gradient background */}
+            <div
+              className={cn(
+                "absolute inset-0 bg-gradient-to-br opacity-0 transition-opacity",
+                regionColors[region.region],
+                selectedRegion === region.region ? "opacity-100" : "group-hover:opacity-50"
+              )}
+            />
+
+            <div className="relative">
+              {/* Region name */}
+              <div className="flex items-center gap-2 mb-3">
+                <div className={cn("w-2 h-2 rounded-full", dotColors[region.region])} />
+                <span className="font-semibold text-sm text-foreground">{region.region}</span>
               </div>
-              <div>
-                <span className="block font-semibold text-foreground text-lg">
-                  {region.supplierCount}
-                </span>
-                Suppliers
+
+              {/* Stats */}
+              <div className="space-y-1.5">
+                <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                  <Building2 className="w-3 h-3" />
+                  <span className="font-medium text-foreground">{region.siteCount}</span>
+                  <span>sites</span>
+                </div>
+                <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                  <Users className="w-3 h-3" />
+                  <span className="font-medium text-foreground">{region.supplierCount}</span>
+                  <span>suppliers</span>
+                </div>
+                <div className="flex items-center gap-2 text-xs text-muted-foreground">
+                  <MapPin className="w-3 h-3" />
+                  <span className="font-medium text-foreground">{region.totalAssets.toLocaleString()}</span>
+                  <span>assets</span>
+                </div>
               </div>
-            </div>
-            <div className="mt-2 flex items-center gap-1 text-xs">
-              <MapPin className="w-3 h-3" />
-              <span>{region.totalAssets} assets</span>
             </div>
           </button>
         ))}

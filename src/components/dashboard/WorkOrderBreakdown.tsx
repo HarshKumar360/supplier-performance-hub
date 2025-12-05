@@ -24,35 +24,54 @@ export function WorkOrderBreakdown({ supplierId }: WorkOrderBreakdownProps) {
     { name: "Overdue", value: filteredWOs.filter((wo) => wo.status === "Overdue").length },
   ];
 
+  const total = statusData.reduce((sum, item) => sum + item.value, 0);
+
   return (
-    <div className="chart-container">
-      <h3 className="font-semibold text-foreground mb-4">Work Order Status</h3>
-      <div className="h-64">
-        <ResponsiveContainer width="100%" height="100%">
-          <PieChart>
-            <Pie
-              data={statusData}
-              cx="50%"
-              cy="50%"
-              innerRadius={50}
-              outerRadius={80}
-              paddingAngle={4}
-              dataKey="value"
-            >
-              {statusData.map((_, index) => (
-                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-              ))}
-            </Pie>
-            <Tooltip
-              contentStyle={{
-                backgroundColor: "hsl(var(--card))",
-                border: "1px solid hsl(var(--border))",
-                borderRadius: "8px",
-              }}
-            />
-            <Legend />
-          </PieChart>
-        </ResponsiveContainer>
+    <div className="bg-card rounded-2xl border border-border/40 p-6 h-full">
+      <div className="h-72 flex flex-col">
+        <div className="flex-1">
+          <ResponsiveContainer width="100%" height="100%">
+            <PieChart>
+              <Pie
+                data={statusData}
+                cx="50%"
+                cy="50%"
+                innerRadius={55}
+                outerRadius={85}
+                paddingAngle={3}
+                dataKey="value"
+                strokeWidth={0}
+              >
+                {statusData.map((_, index) => (
+                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                ))}
+              </Pie>
+              <Tooltip
+                contentStyle={{
+                  backgroundColor: "hsl(var(--card))",
+                  border: "1px solid hsl(var(--border))",
+                  borderRadius: "12px",
+                  boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+                }}
+              />
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+        {/* Custom Legend */}
+        <div className="grid grid-cols-2 gap-2 mt-4">
+          {statusData.map((item, index) => (
+            <div key={item.name} className="flex items-center gap-2">
+              <div
+                className="w-2.5 h-2.5 rounded-full"
+                style={{ backgroundColor: COLORS[index] }}
+              />
+              <span className="text-xs text-muted-foreground">{item.name}</span>
+              <span className="text-xs font-medium text-foreground ml-auto">
+                {item.value}
+              </span>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

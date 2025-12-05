@@ -36,47 +36,54 @@ export function PerformanceChart({ supplierId }: PerformanceChartProps) {
   });
 
   return (
-    <div className="chart-container">
-      <h3 className="font-semibold text-foreground mb-4">Performance Trends</h3>
+    <div className="bg-card rounded-2xl border border-border/40 p-6">
       <div className="h-72">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart data={data} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
-            <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+            <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" opacity={0.5} />
             <XAxis
               dataKey="month"
-              tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }}
-              axisLine={{ stroke: "hsl(var(--border))" }}
+              tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 11 }}
+              axisLine={false}
+              tickLine={false}
             />
             <YAxis
               domain={[60, 100]}
-              tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 12 }}
-              axisLine={{ stroke: "hsl(var(--border))" }}
+              tick={{ fill: "hsl(var(--muted-foreground))", fontSize: 11 }}
+              axisLine={false}
+              tickLine={false}
+              width={35}
             />
             <Tooltip
               contentStyle={{
                 backgroundColor: "hsl(var(--card))",
                 border: "1px solid hsl(var(--border))",
-                borderRadius: "8px",
+                borderRadius: "12px",
+                boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
               }}
             />
-            <Legend />
+            <Legend 
+              wrapperStyle={{ paddingTop: "16px" }}
+              iconType="circle"
+              iconSize={8}
+            />
             <Line
               type="monotone"
               dataKey="sla"
-              name="SLA Compliance %"
+              name="SLA Compliance"
               stroke="hsl(var(--chart-1))"
-              strokeWidth={2}
-              dot={{ fill: "hsl(var(--chart-1))", strokeWidth: 0, r: 4 }}
-              activeDot={{ r: 6, fill: "hsl(var(--chart-1))" }}
+              strokeWidth={2.5}
+              dot={false}
+              activeDot={{ r: 5, fill: "hsl(var(--chart-1))", strokeWidth: 2, stroke: "hsl(var(--card))" }}
             />
             <Line
               type="monotone"
               dataKey="ftfr"
-              name="FTFR %"
+              name="FTFR"
               stroke="hsl(var(--chart-2))"
-              strokeWidth={2}
-              dot={{ fill: "hsl(var(--chart-2))", strokeWidth: 0, r: 4 }}
-              activeDot={{ r: 6, fill: "hsl(var(--chart-2))" }}
+              strokeWidth={2.5}
+              dot={false}
+              activeDot={{ r: 5, fill: "hsl(var(--chart-2))", strokeWidth: 2, stroke: "hsl(var(--card))" }}
             />
           </LineChart>
         </ResponsiveContainer>
